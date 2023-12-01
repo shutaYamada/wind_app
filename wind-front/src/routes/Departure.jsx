@@ -1,8 +1,9 @@
-import { Button } from '@chakra-ui/react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signOut } from '../lib/api/auth'
 import Cookies from 'js-cookie'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const Departure = () => {
     const navigate = useNavigate()
@@ -29,7 +30,10 @@ const Departure = () => {
     }
   return (
     <div>
-      <Button onClick={logOut}>ログアウト</Button>
+      <Header />
+      <Footer />
+      <button onClick={logOut}>ログアウト</button>
+      <button onClick={() => navigate("/windNote")}>ウィンドノート</button>
     </div>
   )
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_27_092409) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_28_074513) do
   create_table "users", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -36,4 +36,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_27_092409) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "wind_notes", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.string "date"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_wind_notes_on_user_id"
+  end
+
+  add_foreign_key "wind_notes", "users"
 end
