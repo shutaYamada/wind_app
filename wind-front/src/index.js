@@ -10,7 +10,10 @@ import WindNote from './routes/WindNote';
 import Home from './routes/Home';
 import Detail from './routes/Detail';
 import { UserProvider } from './routes/UserContext';
+import "./styles.css"
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 
 root.render(
   <UserProvider>

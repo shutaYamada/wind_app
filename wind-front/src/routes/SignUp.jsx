@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { signUp } from '../lib/api/auth'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,6 +9,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { UserContext } from './UserContext'
 
 
+
 const SignUp = () => {
   const { setUser} = useContext(UserContext)
     const navigate = useNavigate()
@@ -16,7 +17,14 @@ const SignUp = () => {
 
     const onSubmit = async (data) => {
         try {
-          const res = await signUp(data);
+          const formData = new FormData()
+          formData.append("name", data.name)
+          formData.append("email", data.email)
+          formData.append("password", data.password)
+          if(image){
+            formData.append("image", image)
+          }
+          const res = await signUp(formData);
           Cookies.set("_access_token", res.headers["access-token"]);
           Cookies.set("_client", res.headers["client"]);
           Cookies.set("_uid", res.headers["uid"]);
@@ -28,6 +36,12 @@ const SignUp = () => {
           console.log(e);
         }
       };
+
+    const [image, setImage] = useState()
+    const selectImage = (e) => {
+      const selectImage = e.target.files[0]
+      setImage(selectImage)
+    }
 
   return (
     <Grid
@@ -117,26 +131,9 @@ const SignUp = () => {
                   />
                 )}
               />
-              {/* <Controller
-                name='passwordConfirmation'
-                control={control}
-                defaultValue=''
-                rules={{
-                  required: { value: true, message: 'パスワード確認は必須です' }
-                }}
-                render={({ field }) => (
-                  <TextField 
-                    {...field}
-                    error={!!errors.passwordConfirmation}
-                    helperText={errors.passwordConfirmation?.message}
-                    label="パスワード確認" 
-                    variant="standard" 
-                    fullWidth 
-                    required 
-                    type="password"
-                  />
-                )}
-              /> */}
+              <h4>プロフィール画像</h4>
+              <input type="file" onChange={(e) => selectImage(e)} />
+              
             <Button type="submit" color="primary" variant="contained" fullWidth style={{marginTop: "15px"}}>
                 登録
             </Button>

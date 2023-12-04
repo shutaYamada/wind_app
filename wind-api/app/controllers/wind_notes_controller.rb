@@ -34,7 +34,14 @@ class WindNotesController < ApplicationController
         render json: wind_note
     end
 
-
+    def is_favorited
+        wind_note = WindNote.find(params[:id])
+        if wind_note.favorited_by?(current_user)
+            render json: { favorited: true }
+        else
+            render json: { favorited: false }
+        end
+    end
     private
 
     def wind_note_params

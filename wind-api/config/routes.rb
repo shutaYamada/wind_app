@@ -7,5 +7,8 @@ Rails.application.routes.draw do
     resources :sessions, only: %i[index]
   end
 
-  resources :wind_notes
+  resources :wind_notes do
+    resource :favorite, only: [:create, :destroy]
+  end
+
 end

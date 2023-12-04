@@ -1,4 +1,4 @@
-import { Link } from '@mui/material'
+import { Box, Link } from '@mui/material'
 import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import {
@@ -25,7 +25,10 @@ const Header = () => {
     //     </ul>
     // </div>
   <>
-        <div style={{position: "fixed"} }>
+     
+    <Box style={{position: "fixed", width: "100%"}  }>
+    <AppBar position="static" style={{backgroundColor:"#DDB786"}}>
+        <Toolbar variant="dense">
           <IconButton
             size='large'
             edge='start'
@@ -39,7 +42,9 @@ const Header = () => {
           <Drawer anchor='left' open={isOpen} onClose={() => setIsOpen(false)}>
             <DrawerMenu />
           </Drawer>
-        </div>
+        </Toolbar>
+      </AppBar>
+    </Box>
   </>
   )
 }
