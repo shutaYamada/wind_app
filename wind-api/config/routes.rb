@@ -10,5 +10,8 @@ Rails.application.routes.draw do
   resources :wind_notes do
     resource :favorite, only: [:create, :destroy]
   end
+  resources :users
+  resources :departures
+  resources :calendar_events
 
 end

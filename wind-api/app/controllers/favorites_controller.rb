@@ -1,35 +1,26 @@
 class FavoritesController < ApplicationController
     def create
         wind_note = WindNote.find(params[:wind_note_id])
-        favorite = current_user.favorites.new(wind_note_id: wind_note.id)
-        if favorite.save
-            render json: { status: 'success', data: favorite }
-        else
-            render json: { status: 'error', data: favorite.errors }
+        if wind_note.like?(current_user)
+            render json: { error: 'Already liked' }, status: :unprocessable_entity
+            return
         end
+
+        wind_note.like(current_user)
+        wind_note.reload
+        favorite = wind_note.likes.find_by(user_id: current_user.id)
+        render json: { wind_note: wind_note, favorite: favorite }        
     end
   
     def destroy
         wind_note = WindNote.find(params[:wind_note_id])
-        favorite = current_user.favorites.find_by(wind_note_id: wind_note.id)
-        if favorite.destroy
-            render json: { status: 'success' }
-        else
-            render json: { status: 'error', data: favorite.errors }
+        unless wind_note.like?(current_user)
+            render json: { error: 'Not liked yet' }, status: :unprocessable_entity
+            return
         end
-    end
 
-    def index
-        wind_notes = WindNote.all
-        wind_notes = wind_notes.map do |wind_note|
-          {
-            id: wind_note.id,
-            title: wind_note.title,
-            description: wind_note.description,
-            date: wind_note.date,
-            isFavorited: current_user.favorites.exists?(wind_note_id: wind_note.id)
-          }
-        end
-        render json: { status: 'success', data: wind_notes }
+        wind_note.unlike(current_user)
+        wind_note.reload
+        render json: wind_note
     end
 end

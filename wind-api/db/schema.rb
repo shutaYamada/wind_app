@@ -10,11 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_03_140332) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_11_022837) do
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "calendar_events", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.boolean "is_absence"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_calendar_events_on_user_id"
+  end
+
+  create_table "departures", force: :cascade do |t|
+    t.time "start_time"
+    t.time "end_time"
+    t.date "date"
+    t.text "comment"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "favorites", force: :cascade do |t|
@@ -60,5 +82,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_140332) do
   end
 
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "calendar_events", "users"
   add_foreign_key "wind_notes", "users"
 end
