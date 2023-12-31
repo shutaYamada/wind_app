@@ -1,7 +1,6 @@
 class DeparturesController < ApplicationController
     def index
-        start_date = Date.current
-        end_date = start_date + 1.day
+        
         departures = Departure.where(date: start_date..end_date).group_by(&:date)
         render json: departures, include: :user
         # #今週の 未出艇者を出す

@@ -26,8 +26,8 @@ const Header = () => {
     // </div>
   <>
      
-    <Box style={{position: "fixed", width: "100%"}  }>
-    <AppBar position="static" style={{backgroundColor:"#DDB786"}}>
+    <Box style={{position: "fixed", width: "100%",zIndex:9999}  }>
+    <AppBar position="sticky" style={{backgroundColor:"#DDB786"}}>
         <Toolbar variant="dense">
           <IconButton
             size='large'

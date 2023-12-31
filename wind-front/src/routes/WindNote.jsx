@@ -11,25 +11,30 @@ import CreateNoteModal from '../components/CreateNoteModal'
 import { Center } from '@chakra-ui/react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import axios from 'axios'
 
 const WindNote = () => {
     const [notes, setNotes] = useState([])
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [date, setDate] = useState("")
-    const navigate = useNavigate()
-    const { user } = useContext(UserContext)
-    const [isFavorited, setIsFavorited] = useState(false)
+    // const [like, setLike] = useState(isLike)
+    // const [likeId, setLikeId] = useState(isLikeId)
+    // const [likeNum, setLikeNum] = useState(WindNote.likes.length)
 
-    const toggleFavorite = async (noteId) => {
-        const note = notes.find(note => note.id === noteId);
-    if (note.isFavorited) {
-        await deleteFavorite(noteId);
-    } else {
-        await createFavorite(noteId);
-    }
-    allWindNote();
-    };
+
+    // const isLike = WindNote.likes.find((x) => x.user_id === state.currentUser.id) !== undefined;
+    // const isLikeId = isLike
+    //     ? WindNote.likes.find((x) => x.user_id === state.currentUser.id).id
+    //     : false
+
+    // const handleClickLike = async (event) => {
+    //     event.preventDefault()
+    //     if (!like){
+    //         setLike(!like)
+    //         const res = await createFavorite()
+    //         setLikeId(res.data.like_id)
+    //         setLikeNum(likeNum + 1)
+    //     }
+    // }
+    
     const createNote = async (event) => {
         await createWindNote({
             title: event.title,
@@ -40,14 +45,10 @@ const WindNote = () => {
 
     }
 
-    console.log(isFavorited)
-
-
     const allWindNote = async () => {
         const res = await getWindNotes();
         setNotes(res.data);
-      };
-      
+    };
 
     useEffect(() => {
         allWindNote()
@@ -62,8 +63,7 @@ const WindNote = () => {
         setOpen(false)
     }
 
-    
-
+    console.log(notes)
   return (
     <div style={{backgroundColor: "#F5F6F6", margin:"0px"}} >
         <Header />
@@ -109,11 +109,11 @@ const WindNote = () => {
                                 </p>
                             </Grid>
                            
-                            <Grid xs="2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems:"flex-end" }}>
+                            <Grid xs="2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems:"center" }}>
                                 <Typography>
                                     {`${dateObject.getMonth() + 1}月${dateObject.getDate()}日 `}
                                 </Typography>
-                                <Button onClick={() => toggleFavorite(note.id)}>
+                                <Button>
                                     {note.isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                                 </Button>
                             </Grid>
@@ -126,6 +126,7 @@ const WindNote = () => {
         <Note />
         <Button onClick={handleOpen}>ノートを追加</Button>
         <CreateNoteModal open={open} onClose={handleClose} handleClose={handleClose} createNote={createNote} />
+        
     </div>
     
   )

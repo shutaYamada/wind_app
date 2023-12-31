@@ -34,7 +34,7 @@ const DrawerMenu = () => {
     }
 
     const menuList = [ 
-      { text: 'ホーム', path: '/home' }, 
+      { text: 'メンバー一覧', path: '/userAll' }, 
       { text: 'マイペ', path: '/mypage' }, 
       { text: '出艇', path: '/departure' }, 
       { text: 'ノート', path: '/windNote' }, 
