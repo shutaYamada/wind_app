@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Box,
     List,
@@ -9,8 +9,13 @@ import {
 import Cookies from 'js-cookie'
 import { useNavigate, Link } from 'react-router-dom'
 import { signOut } from '../lib/api/auth'
+import { UserContext } from '../routes/UserContext'
+import { useContext } from 'react'
 
 const DrawerMenu = () => {
+    const { user, setUser } = useContext(UserContext)
+
+    console.log(user)
     const navigate = useNavigate()
     const logOut = async () => {
         try {
@@ -21,7 +26,8 @@ const DrawerMenu = () => {
               Cookies.remove("_access_token")
               Cookies.remove("_client")
               Cookies.remove("_uid")
-            
+
+              setUser(null)
               navigate("/")
       
               console.log("Succeeded in sign out")
@@ -33,13 +39,19 @@ const DrawerMenu = () => {
           }
     }
 
-    const menuList = [ 
+    const menuList =  user 
+    ?[ 
       { text: 'メンバー一覧', path: '/userAll' }, 
       { text: 'マイペ', path: '/mypage' }, 
       { text: '出艇', path: '/departure' }, 
       { text: 'ノート', path: '/windNote' }, 
       { text: 'カレンダー', path: '/calendar' }, 
+      { text: 'メンバー一覧', path: '/userAll' }, 
       { text: 'ログアウト', path: '/', action: logOut }
+    ]
+    :[
+      {text:"新規登録", path:"/signUp"},
+      {text:"ログイン", path:"/"}
     ]
 
   return (

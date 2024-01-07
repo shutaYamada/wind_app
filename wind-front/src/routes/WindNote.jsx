@@ -6,12 +6,13 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useContext } from 'react'
 import { UserContext } from './UserContext'
-import { Box, Button, Grid, Paper, Typography } from '@mui/material'
+import { Avatar, Box, Button, Grid, Paper, Typography } from '@mui/material'
 import CreateNoteModal from '../components/CreateNoteModal'
 import { Center } from '@chakra-ui/react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import axios from 'axios'
+import UserAll from './UserAll'
 
 const WindNote = () => {
     const [notes, setNotes] = useState([])
@@ -84,14 +85,8 @@ const WindNote = () => {
                         <Grid container key={index} width="93%" margin="0 auto" alignItems="center" mb="20px" bgcolor="white" borderRadius="10px" pt="10px" pr="10px" style={{ display: 'flex', alignItems: 'stretch' }} >
                             <Grid item xs="2"  style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                 <Link to="">
-                                <img 
+                                <Avatar
                                     src={`http://localhost:3001${note.user?.image?.url}`} 
-                                    style={{ 
-                                        width: '50px', 
-                                        height: '50px', 
-                                        objectFit: 'cover', 
-                                        borderRadius:"50%", 
-                                    }} 
                                 />
                                 </Link>
                                 <Link to=""  style={{color: "black", textDecoration:"none"}}>
@@ -126,7 +121,6 @@ const WindNote = () => {
         <Note />
         <Button onClick={handleOpen}>ノートを追加</Button>
         <CreateNoteModal open={open} onClose={handleClose} handleClose={handleClose} createNote={createNote} />
-        
     </div>
     
   )

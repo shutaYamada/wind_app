@@ -4,9 +4,10 @@ import { getUser, signIn } from '../lib/api/auth'
 import Cookies from 'js-cookie'
 import { Controller, useForm } from 'react-hook-form'
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Avatar, Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { teal } from '@mui/material/colors';
 import { UserContext } from '../routes/UserContext'
+import { background } from '@chakra-ui/react'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -62,14 +63,8 @@ const Login = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          height: "50vh",
-          width: "280px",
-          m: "auto"
-        }}
+      <Box
+        p="10vw"
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid
@@ -98,9 +93,10 @@ const Login = () => {
                 error={!!errors.email}
                 helperText={errors.email?.message}
                 label="メールアドレス" 
-                variant="standard" 
+                variant="outlined" 
                 fullWidth 
                 required 
+                inputProps={{style:{backgroundColor: '#fff' }}}
               />
             )}
           />
@@ -117,19 +113,21 @@ const Login = () => {
                 error={!!errors.password}
                 helperText={errors.password?.message}
                 label="パスワード" 
-                variant="standard" 
+                variant="outlined" 
                 fullWidth 
                 required 
                 type="password"
+                inputProps={{style:{backgroundColor: '#fff'}}}
+                style={{marginTop:"10px"}}
               />
             )}
           />
-          <Button type="submit" color="primary" variant="contained" fullWidth style={{marginTop: "15px"}}>
+          <Button type="submit" variant="contained" fullWidth style={{margin: "15px 0", backgroundColor:"#FE9158"}}>
               サインイン
           </Button>
-          <Link style={{marginTop: "15px"}} to="/signUp" >新規登録はこちら</Link>
+          <Link style={{marginTop:"10px"}} to="/signUp" >新規登録はこちら</Link>
         </form>
-      </Paper>
+      </Box>
     </Grid>
   )
 }

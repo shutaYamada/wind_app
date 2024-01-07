@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_11_022837) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_06_082611) do
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
@@ -30,9 +30,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_11_022837) do
   end
 
   create_table "departures", force: :cascade do |t|
-    t.time "start_time"
-    t.time "end_time"
-    t.date "date"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.text "comment"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -65,6 +64,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_11_022837) do
     t.text "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sail_number"
+    t.integer "grade"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

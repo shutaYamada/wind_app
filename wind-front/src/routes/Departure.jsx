@@ -4,25 +4,22 @@ import { signOut } from '../lib/api/auth'
 import Cookies from 'js-cookie'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { Box, Button, Card, CardHeader, CssBaseline, Grid, Link, Modal, Typography } from '@mui/material'
+import { Avatar, Box, Button, Card, CardHeader, CssBaseline, Grid, Link, ListItem, ListItemAvatar, ListItemText, Modal, Typography } from '@mui/material'
 import { createDeparture, getDeparture } from '../lib/api/departure'
 import CreateDepartureModal from '../components/CreateDepartureModal'
-import CloseIcon from '@mui/icons-material/Close';
-import dayjs from 'dayjs'
+
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+import FullCalendar from '@fullcalendar/react'
+import jaLocale from '@fullcalendar/core/locales/ja';
+
+
 
 
 const Departure = () => {
   const [open, setOpen] = useState(false)
   const [selectDate, setSelectedDate] = useState(null)
-  // 今日の月と日にち
-  let today = dayjs()
-  let todayMonth = today.month() + 1; 
-  let todayDate = today.date()
-
-  // 明日の月と日にち
-  let tomorrow = dayjs().add(1, 'day');
-  let tomorrowMonth = tomorrow.month() + 1;
-  let tomorrowDate = tomorrow.date();
+  const [departures, setDepartures] = useState(null)
+  const [userResources, setUserResources] = useState(null)
 
   const handleOpen = () => {
     setOpen(true)
@@ -30,46 +27,79 @@ const Departure = () => {
   const handleClose = () => {
     setOpen(false)
   }
+
+  const createDep = async (event) => {
+    await createDeparture({
+      start_time: event.startDateTime,
+      end_time: event. endDateTime,
+      comment: event.comment
+    })
+    getEvents()
+  }
+
+  const getEvents = async () => {
+    try{
+    const res = await getDeparture()
+    const departureEvents = res.data.map((departureEvent) => {
+      return{
+        id: departureEvent.id,
+        title:departureEvent.user.name,
+        start: departureEvent.startTime,
+        end: departureEvent.endTime,
+        backgroundColor: '#1B76D2',
+        resourceId: departureEvent.user.id
+      }
+    })
+    const userInfo = res.data.map((departureEvent) => {
+      return {
+        id: departureEvent.user.id,
+        title: departureEvent.user.name
+      };
+    });
+    setDepartures(departureEvents)
+    setUserResources(userInfo)
+    console.log(departures)
+  } catch (event){
+    console.log(event)
+  }
+  }
+
+
+  
+
+  useEffect(() => {
+    getEvents();
+  }, []);
+
+  
+
+  // departuresがnullの場合はローディングメッセージを表示
+  if (departures === null) {
+    return <div>Loading...</div>;
+  }
+  
+
   return (
-    <Box bgcolor="#F5F5F5" height="100vh">
-    
-      
+    <Box  height="100vh">
       <Header />
       <div style={{ height: '60px' }} />
-        <Grid>
-          <Box textAlign="center" bgcolor="white" width="50%" marginX="auto" mb="20px" p="15px">
-            <Box display="flex" justifyContent="center" alignItems="center" >
-              <Typography variant='h5'>{todayMonth}月{todayDate}日</Typography>
-              <Button 
-                variant="contained" sx={{marginLeft:3}} 
-                onClick={() => {handleOpen(); setSelectedDate(today); console.log(selectDate)}}
-              >
-                出艇する
-              </Button>
-            </Box>
-            <Box>
-              <p>出艇者はいません</p>
-            </Box>
-          </Box>
-          <Box textAlign="center" bgcolor="white" width="50%" marginX="auto"mb="20px"p="15px" >
-            <Box display="flex" justifyContent="center" alignItems="center" >
-              <Typography variant='h5'>{tomorrowMonth}月{tomorrowDate}日</Typography>
-              <Button 
-                variant="contained" sx={{marginLeft:3}}
-                onClick={() => {handleOpen(); setSelectedDate(tomorrow); console.log(selectDate)}}
-              > 
-                出艇する
-              </Button>
-            </Box>
-            <Box>
-              <p>出艇者はいません</p>
-            </Box>
-          </Box>
-        </Grid>
+        
+
+      <FullCalendar
+        plugins={[ resourceTimelinePlugin ]}
+        initialView='resourceTimelineDay'
+        locale={jaLocale}
+        resourceAreaHeaderContent="出艇者"
+        events={departures}
+        resources={userResources}
+        slotMinTime="06:00:00" 
+        slotMaxTime="18:00:00" 
+      />
+      <Button variant='contained' onClick={()=> handleOpen()}>出艇する</Button>
         
 
       <Footer />
-      <CreateDepartureModal open={open} onClose={handleClose} handleClose={handleClose} selectDate={selectDate} />
+      <CreateDepartureModal open={open} onClose={handleClose} handleClose={handleClose} createDep={createDep} />
     </Box>
   )
 }

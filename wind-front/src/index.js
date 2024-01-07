@@ -30,6 +30,7 @@ root.render(
           <Route path="windNote/:id" element={<Detail />} />
           <Route path="userAll" element={<UserAll />} />
           <Route path="calendar" element={<Calendar />} />
+        
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

@@ -1,12 +1,17 @@
+import { Box } from '@mui/material';
 import './App.css';
 import Login from './components/Login';
+import Header from './components/Header';
 
 function App() {
+  
 
   return (
-    <div>
+    
+    <Box bgcolor="#F8F3E8">
+      <Header />
       <Login />
-    </div>
+    </Box>
   );
 }
 

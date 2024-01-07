@@ -15,6 +15,9 @@ import { useNavigate } from 'react-router-dom'
 import { UpdateEventModal } from '../components/UpdateEventModal'
 import CheckIcon from '@mui/icons-material/Check';
 import { UserContext } from './UserContext'
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+
+
 
 const Calendar = () => {
   const [eventId, setEventId] = useState("")
@@ -28,6 +31,7 @@ const Calendar = () => {
   const [date, setDate] = useState("")
   const { user } = useContext(UserContext)
 
+  console.log(user)
 
   const navigate = useNavigate();
 
@@ -83,16 +87,16 @@ const Calendar = () => {
           end: calendarEvent.endDate,
           isAbsence: calendarEvent.isAbsence,
           backgroundColor: calendarEvent  .isAbsence ? '#FF8FA3' : '#3888D8', // Add this line
-
         }
       })
       setEvents(calendarEvents)
-      
+      console.log(res.data)
     } catch (event){
       console.log(event)
     }
   }
 
+  console.log(events)
   
 
   useEffect(() => {
@@ -216,6 +220,7 @@ const Calendar = () => {
             events={events} 
             eventContent={renderEventContent}
           />
+         
           
       </Box>
       
@@ -233,19 +238,8 @@ const Calendar = () => {
       </Box>
       {/* <Footer /> */}
       <CreateEventModal open={open} onClose={handleClose} handleClose={handleClose} createCalendar={createCalendar} />
-      <UpdateEventModal
-        onClose={onclose}
-        updateEvent={updateEvent}
-        setUpdateTitle={setUpdateTitle}
-        setUpdateDescription={setUpdateDescription}
-        setUpdateStartDate={setUpdateStartDate}
-        setUpdateEndDate={setUpdateEndDate}
-        updateEventId={eventId}
-        updateTitle={updateTitle}
-        updateDescription={updateDescription}
-        updateStartDate={updateStartDate}
-        updateEndDate={updateEndDate}
-      />
+     
+      
 
     </Box>
   )
