@@ -13,6 +13,7 @@ import { UserProvider } from './routes/UserContext';
 import "./styles.css"
 import UserAll from './routes/UserAll';
 import  Calendar  from "./routes/Calendar"
+import Login from './routes/Login';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -30,7 +31,7 @@ root.render(
           <Route path="windNote/:id" element={<Detail />} />
           <Route path="userAll" element={<UserAll />} />
           <Route path="calendar" element={<Calendar />} />
-        
+          <Route path='logIn' element={<Login />} />
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

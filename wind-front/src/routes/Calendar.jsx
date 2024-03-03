@@ -157,7 +157,6 @@ const Calendar = () => {
     const f = async () => {
       try {
         const getUserRes = await getUser();
-        
         if (!getUserRes.data.isLogin) {
           navigate("/");
         }

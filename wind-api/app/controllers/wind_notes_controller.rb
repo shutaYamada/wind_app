@@ -1,8 +1,17 @@
 class WindNotesController < ApplicationController
-    before_action :authenticate_user!
     def index
         wind_notes = WindNote.includes(:user).all
-        render json: wind_notes, include: :user
+    
+        # ユーザーがログインしている場合のみお気に入り情報を追加
+        if user_signed_in?
+          wind_notes = wind_notes.as_json(include: :user).map do |wind_note|
+            wind_note.merge({"is_favorite" => current_user.favorites.exists?(wind_note_id: wind_note["id"])})
+          end
+        else
+          wind_notes = wind_notes.as_json(include: :user)
+        end
+    
+        render json: wind_notes
     end
 
     def create
@@ -24,7 +33,7 @@ class WindNotesController < ApplicationController
 
     def update
         wind_note = WindNote.find(params[:id])
-        wind_note = WindNote.update!(wind_note_params)
+        wind_note.update!(wind_note_params)
         render json: wind_note
     end
 

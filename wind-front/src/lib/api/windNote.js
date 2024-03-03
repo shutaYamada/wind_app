@@ -3,12 +3,7 @@ import client from "./client";
 
 // 予定一覧
 export const getWindNotes = () => {
-  if (
-    !Cookies.get("_access_token") ||
-    !Cookies.get("_client") ||
-    !Cookies.get("_uid")
-  )
-    return;
+ 
   return client.get("/wind_notes", {
     headers: {
       "access-token": Cookies.get("_access_token"),
@@ -36,14 +31,14 @@ export const createWindNote = (params) => {
 };
 
 // 予定更新
-export const updateWindNoteEvent = (params) => {
+export const updateWindNote = (params) => {
   if (
     !Cookies.get("_access_token") ||
     !Cookies.get("_client") ||
     !Cookies.get("_uid")
   )
     return;
-  return client.put(`/wind_notes/${params.windNoteId}`, params, {
+  return client.put(`/wind_notes/${params.id}`, params, {
     headers: {
       "access-token": Cookies.get("_access_token"),
       client: Cookies.get("_client"),

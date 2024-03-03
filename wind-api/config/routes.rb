@@ -13,5 +13,4 @@ Rails.application.routes.draw do
   resources :users
   resources :departures
   resources :calendar_events
-
 end

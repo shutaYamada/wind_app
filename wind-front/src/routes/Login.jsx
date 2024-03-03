@@ -8,12 +8,12 @@ import { Avatar, Box, Button, Grid, Paper, TextField, Typography } from '@mui/ma
 import { teal } from '@mui/material/colors';
 import { UserContext } from '../routes/UserContext'
 import { background } from '@chakra-ui/react'
+import Header from '../components/Header'
 
 const Login = () => {
     const navigate = useNavigate()
     const { control, handleSubmit, formState: { errors }, setError } = useForm()
-    const { setUser } = useContext(UserContext)
-    const { user } = useContext(UserContext)
+    const { user, setUser,isSignedIn, setIsSignedIn } = useContext(UserContext)
     const onSubmit = async (data) => {
         try {
             const res = await signIn(data);
@@ -36,6 +36,7 @@ const Login = () => {
             console.log(res.data.data)
             Cookies.set('user', JSON.stringify(res.data.data));
             setUser(res.data.data)
+            setIsSignedIn(true)
         } catch (e) {
             console.log(e);
         }
@@ -57,9 +58,11 @@ const Login = () => {
       }, [navigate]);
 
   return (
-    <Grid 
+    <>
+      <Header />
+      <Grid 
       container
-      style={{width: "100%", height: "100vh"}} 
+      style={{width: "100%", height: "100vh", backgroundColor:"#F9F9F6"}} 
       justifyContent="center"
       alignItems="center"
     >
@@ -122,13 +125,14 @@ const Login = () => {
               />
             )}
           />
-          <Button type="submit" variant="contained" fullWidth style={{margin: "15px 0", backgroundColor:"#FE9158"}}>
-              サインイン
+          <Button type="submit" variant="contained" fullWidth style={{margin: "15px 0", backgroundColor:"#808080"}}>
+              ログイン
           </Button>
           <Link style={{marginTop:"10px"}} to="/signUp" >新規登録はこちら</Link>
         </form>
       </Box>
     </Grid>
+    </>
   )
 }
 

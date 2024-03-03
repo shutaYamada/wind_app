@@ -13,9 +13,8 @@ import { UserContext } from '../routes/UserContext'
 import { useContext } from 'react'
 
 const DrawerMenu = () => {
-    const { user, setUser } = useContext(UserContext)
-
-    console.log(user)
+  const { user, setUser,isSignedIn, setIsSignedIn } = useContext(UserContext)
+  console.log(user)
     const navigate = useNavigate()
     const logOut = async () => {
         try {
@@ -28,6 +27,7 @@ const DrawerMenu = () => {
               Cookies.remove("_uid")
 
               setUser(null)
+              setIsSignedIn(false)
               navigate("/")
       
               console.log("Succeeded in sign out")
@@ -39,21 +39,21 @@ const DrawerMenu = () => {
           }
     }
 
-    const menuList =  user 
-    ?[ 
+    let menuList =  [ 
       { text: 'メンバー一覧', path: '/userAll' }, 
       { text: 'マイペ', path: '/mypage' }, 
       { text: '出艇', path: '/departure' }, 
       { text: 'ノート', path: '/windNote' }, 
       { text: 'カレンダー', path: '/calendar' }, 
       { text: 'メンバー一覧', path: '/userAll' }, 
-      { text: 'ログアウト', path: '/', action: logOut }
     ]
-    :[
-      {text:"新規登録", path:"/signUp"},
-      {text:"ログイン", path:"/"}
-    ]
-
+    if (isSignedIn) {
+      menuList.push({ text: 'ログアウト', path: '/', action: logOut });
+    } else {
+      menuList.push({ text: 'ログイン', path: '/login' });
+      menuList.push({ text: 'ユーザー登録', path: '/signUp' });
+    }
+    
   return (
     <Box
       role='presentation'

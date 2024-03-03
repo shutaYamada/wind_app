@@ -17,7 +17,7 @@ const Footer = () => {
                     setValue(newValue);
                 }}
             >
-            <BottomNavigationAction href='/' label="ホーム"  icon={<HomeIcon />} />
+            <BottomNavigationAction href='/home' label="ホーム"  icon={<HomeIcon />} />
             <BottomNavigationAction href='/departure' label="出艇" icon={<TripOriginIcon />} />
             <BottomNavigationAction href='/windNote' label="ノート" icon={<NoteIcon />} />
             </BottomNavigation>

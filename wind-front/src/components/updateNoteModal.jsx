@@ -1,5 +1,5 @@
 import { Box, Button, Input, Modal, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { CloseButton, color } from '@chakra-ui/react';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -8,10 +8,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { deleteWindNote } from '../lib/api/windNote';
 import { Navigate } from 'react-router-dom';
-const CreateNoteModal = ({ open, onClose,  handleClose, createNote}) => {
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [date, setDate] = useState("")
+import dayjs from 'dayjs';
+
+const UpdateNoteModal = ({ openEdit, onClose,  handleClose, updateNote,note}) => {
+    const [title, setTitle] = useState(note?.title || "");
+    const [noteId, setNoteId] = useState(note?.id || "");
+    const [description, setDescription] = useState(note?.description || "");
+    const [date, setDate] = useState(note?.date ? dayjs(note.date) : null);
+
+    
+
+    console.log(noteId)
+    
 
     const changeDate = (date) => {
         console.log(date)
@@ -77,7 +85,7 @@ const CreateNoteModal = ({ open, onClose,  handleClose, createNote}) => {
     }
   return (
     <Modal
-        open={open}
+        open={openEdit}
         onClose={onClose}
         
     >
@@ -125,8 +133,8 @@ const CreateNoteModal = ({ open, onClose,  handleClose, createNote}) => {
                     onClick={() => {
                         clearCharacter()
                         onClose()
-                        createNote({title, description, date})
-                    }}
+                        updateNote({title, description, date, noteId })
+                    }}  
                     variant="contained" >追加
                 </Button>
             </Stack>
@@ -135,4 +143,4 @@ const CreateNoteModal = ({ open, onClose,  handleClose, createNote}) => {
   )
 }
 
-export default CreateNoteModal
+export default UpdateNoteModal

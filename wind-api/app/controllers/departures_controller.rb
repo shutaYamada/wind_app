@@ -12,6 +12,23 @@ class DeparturesController < ApplicationController
         render json: departure
     end
 
+    def edit 
+        departure = Departure.find(params[:id])
+        render json: departure
+    end
+
+    def update
+        departure = Departure.find(params[:id])
+        departure.update(departure_params)
+        render json: departure
+    end
+
+    def destroy
+        departure = Departure.find(params[:id])
+        departure.destroy
+        render json: departure
+    end
+
     private
 
     def departure_params
