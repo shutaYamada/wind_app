@@ -9,10 +9,10 @@ const UpdateDepartureModal = ({openEdit, onClose, handleClose, updateDep, depart
   const [startDateTime, setStartDateTime] = useState(null)
   const [endDateTime, setEndDateTime] = useState(null)
   const [date, setDate] = useState(null)
-  const [departureId, setDepartureId] = useState(departure?.id)
+  const [departureId, setDepartureId] = useState(null)
   const [formerDate, setFormerDate] = useState(null)
   const [comment, setComment] = useState("")
-    console.log(departure?.comment)
+    console.log(departureId)
   useEffect(() => {
     if (departure) {
         const start = dayjs(departure.start)
@@ -20,10 +20,13 @@ const UpdateDepartureModal = ({openEdit, onClose, handleClose, updateDep, depart
         setStartDateTime(start)
         setEndDateTime(end)
 
+        setDepartureId(departure.id)
+        
+
         const departureDate = dayjs(departure.startStr);
         const today = dayjs();
         const isToday = departureDate.isSame(today, 'day');
-        setFormerDate(isToday ? 'today' : 'tomorrow');
+        // setFormerDate(isToday ? 'today' : 'tomorrow');
         setDate(isToday ? today : today.add(1, 'day'));
 
         setComment(departure.comment)
@@ -31,37 +34,34 @@ const UpdateDepartureModal = ({openEdit, onClose, handleClose, updateDep, depart
   }, [departure]);
    
   
-    const handleRadio = (event) => {
-        let today = dayjs()
-        let tomorrow = dayjs().add(1, 'day')
-      if(event.target.value === "today"){
-        setDate(today)
-      }
-      else{
-        setDate(tomorrow)
-      }
-    }
-
-  const handleStartTime = (timeStart) => {
-    console.log(timeStart)
-    const timeOnly1 = dayjs(timeStart).set('year', 1970).set('month', 0).set('date', 1);
-    const combinedStartTime = dayjs(date).set('hour', timeOnly1.hour()).set('minute', timeOnly1.minute());
-    setStartDateTime(combinedStartTime.format());
-    
+  const handleRadio = (event) => {
+    const selectedDate = event.target.value;
+    setFormerDate(selectedDate); // 'today' または 'tomorrow' を設定
+  
+    const today = dayjs();
+    const tomorrow = dayjs().add(1, 'day');
+    setDate(selectedDate === "today" ? today : tomorrow); // 日付オブジェクトを更新
   };
 
-  const handleEndTime = (timeEnd )=> {
-    console.log(timeEnd)
-    const timeOnly2 = dayjs(timeEnd).set('year', 1970).set('month', 0).set('date', 1);
-    const combinedEndTime = dayjs(date).set('hour', timeOnly2.hour()).set('minute', timeOnly2.minute());
-    setEndDateTime(combinedEndTime.format());
-  }
+  const handleStartTime = (timeStart) => {
+    // 開始時間の処理
+    const timeOnly = dayjs(timeStart).set('year', dayjs(date).year()).set('month', dayjs(date).month()).set('date', dayjs(date).date());
+    setStartDateTime(timeOnly.format());
+  };
+  
+  const handleEndTime = (timeEnd) => {
+    // 終了時間の処理
+    const timeOnly = dayjs(timeEnd).set('year', dayjs(date).year()).set('month', dayjs(date).month()).set('date', dayjs(date).date());
+    setEndDateTime(timeOnly.format());
+  };
 
   const clearCharacter = () => {
     setStartDateTime(null)
     setEndDateTime(null)
     setComment("")
   }
+
+  console.log(endDateTime)
 
   const style =  {
     position: 'absolute',
@@ -74,6 +74,8 @@ const UpdateDepartureModal = ({openEdit, onClose, handleClose, updateDep, depart
     borderRadius: '5px',
     width:"80%"
   }
+
+  console.log(date)
 
   
   return (

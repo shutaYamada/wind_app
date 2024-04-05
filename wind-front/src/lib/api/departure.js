@@ -29,6 +29,22 @@ export const createDeparture = (params) => {
     });
 }
 
+export const showDeparture = (params) => {
+  if (
+      !Cookies.get("_access_token") ||
+      !Cookies.get("_client") ||
+      !Cookies.get("_uid")
+  )
+      return;
+  return client.get(`/departures/${params.id}`, params, {
+          headers: {
+          "access-token": Cookies.get("_access_token"),
+          client: Cookies.get("_client"),
+          uid: Cookies.get("_uid"),
+      },
+  });
+}
+
 export const editWindNote = (params) => {
     if (
       !Cookies.get("_access_token") ||

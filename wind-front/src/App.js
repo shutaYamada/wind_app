@@ -14,7 +14,6 @@ function App() {
   
   return (
     <Box>
-      <Header />
       <Link to="/signUp">新規登録はこちら</Link>
       <Link to="/logIn">ログインはこちら</Link>
     </Box>

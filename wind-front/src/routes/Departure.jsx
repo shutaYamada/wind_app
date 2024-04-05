@@ -14,6 +14,7 @@ import { UserContext } from './UserContext'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import UpdateDeparturetModal from '../components/UpdateDepartureModal'
+import dayjs from 'dayjs'
 
 
 
@@ -51,18 +52,37 @@ const Departure = () => {
     getEvents()
   }
 
+  const getBackgroundColorByGrade = (grade) => {
+    const gradeStr = String(grade)
+    switch (gradeStr) {
+      case '1':
+        return '#FFD700'; // 金色
+      case '2':
+        return '#C0C0C0'; // 銀色
+      case '3':
+        return '#CD7F32'; // 銅色
+      case '4':
+        return '#78C8F1';
+      default:
+        return '#F0F0F0'; // デフォルト色
+    }
+  };
+  
+
   const getEvents = async () => {
     try{
     const res = await getDeparture()
     const departureEvents = res.data.map((departureEvent) => {
+      const backgroundColor = getBackgroundColorByGrade(departureEvent.user?.grade);
       return{
         id: departureEvent.id,
         title:departureEvent.user.name,
         start: departureEvent.startTime,
         end: departureEvent.endTime,
         comment: departureEvent.comment,
-        backgroundColor: '#3EA8FF',
         resourceId: departureEvent.user.id,
+        grade: departureEvent.user.grade,
+        backgroundColor,
         extendedProps: {
           userId: departureEvent.user.id 
         }
@@ -78,11 +98,12 @@ const Departure = () => {
     });
     setDepartures(departureEvents)
     setUserResources(userInfo)
-    console.log(departures)
   } catch (event){
     console.log(event)
   }
   }
+
+  console.log(departures)
 
   const editHandler = async (departure) => {
     setOpenEdit(true)
@@ -113,6 +134,7 @@ const Departure = () => {
     })
     getEvents()
   }
+  console.log(selectedDeparture)
 
   // departuresがnullの場合はローディングメッセージを表示
   if (departures === null) {
@@ -131,7 +153,7 @@ const Departure = () => {
           <EditIcon />
             編集
           </MenuItem>
-          <MenuItem key="delte" onClick={()=> deleteHandler(selectedDeparture.id)} >
+          <MenuItem key="delte" onClick={()=> deleteHandler(selectedDeparture?.id)} >
             <DeleteIcon />
             削除
           </MenuItem>
@@ -139,8 +161,9 @@ const Departure = () => {
       )
     }
   }
-  
 
+  
+console.log(dayjs(selectedDeparture?.endStr).format("HH:mm"))
   return (
     <Box  height="100vh" bgcolor="#F9F9F6"> 
       <Header />
@@ -167,8 +190,19 @@ const Departure = () => {
           />
         </Box>
       </Box>
+      <Box>
+        <Typography variant='h6' bgcolor="#EEF5FF" border="1px solid #F0F0F0" >{selectedDeparture?.title}</Typography>
+        {selectedDeparture && (
+    <>
+      <Typography variant='h5' border="1px solid #F0F0F0">
+        {dayjs(selectedDeparture.startStr).format("HH:mm")}~{dayjs(selectedDeparture.endStr).format("HH:mm")}
+      </Typography>
+      <Typography variant='h5' border="1px solid #F0F0F0">{selectedDeparture.extendedProps.comment}</Typography>
+    </>
+  )}
+      </Box>
       <Box textAlign="center" marginTop="20px">
-        <Button variant='contained' style={{ backgroundColor: "gray" }} onClick={handleOpen}>
+        <Button variant='contained'  style={{ backgroundColor: "gray", width:"95vw" }} onClick={handleOpen}>
           出艇する
         </Button>
       </Box>

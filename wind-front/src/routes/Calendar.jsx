@@ -103,11 +103,11 @@ const Calendar = () => {
     const f = async () => {
       try {
         const today = new Date();
+
         const todayEvent = events.find(event => {
           const eventStartDate = new Date(event.start);
           const eventEndDate = new Date(event.end);
           return today >= eventStartDate && today <= eventEndDate;
-
         });
         if (todayEvent) {
           const res = await handleGetDetail(todayEvent.eventId);
@@ -203,7 +203,7 @@ const Calendar = () => {
   };
 
   return (
-    <Box>
+    <Box bgcolor="#F9F9F6">
       <Header />
       <Box>
         <div style={{ height: '60px' }} />
@@ -231,15 +231,14 @@ const Calendar = () => {
           {selectedEvent && selectedEvent.isAbsence ?  <><CheckIcon />欠席連絡</> : ''}
         </Typography>
         {selectedEvent && user.id === selectedEvent.userId && <Button variant="contained" color='error' onClick={deleteHandler}>予定を削除する</Button>}
+        <Box textAlign="center" marginTop="20px">
+          <Button variant="contained" onClick={handleOpen} style={{backgroundColor: "gray", width:"95vw"}}>予定を追加</Button>
+        </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt:"20px" }}>
-      <Button variant="contained" onClick={handleOpen}>予定を追加</Button>
-      </Box>
-      {/* <Footer /> */}
+      
       <CreateEventModal open={open} onClose={handleClose} handleClose={handleClose} createCalendar={createCalendar} />
      
-      
-
+      <Footer />
     </Box>
   )
 }

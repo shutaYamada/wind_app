@@ -5,6 +5,11 @@ class DeparturesController < ApplicationController
     
     end
 
+    def show 
+        departure = Departure.find(params[:id])
+        render json: departure
+    end
+
     def create
         departure = Departure.new(departure_params)
         departure.user_id = current_user.id
